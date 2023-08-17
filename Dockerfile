@@ -12,7 +12,7 @@ RUN mv ./project-api /opt/app
 
 # Grab static data
 WORKDIR /opt/app
-RUN cp -r ../src/static ../
+RUN cp -r ./src/static /opt/app
 
 # Remove build source
 RUN rm -rf ./src
