@@ -35,5 +35,14 @@ func GetHangang(area int) (*Hangang, error) {
 		return nil, err
 	}
 
+	for i, d := range data.WaterPOS.Row {
+		rawDate := d.Date
+		day := fmt.Sprintf("%c%c", rawDate[len(rawDate)-2], rawDate[len(rawDate)-1])
+		month := fmt.Sprintf("%c%c", rawDate[len(rawDate)-4], rawDate[len(rawDate)-3])
+		year := fmt.Sprintf("%c%c%c%c", rawDate[0], rawDate[1], rawDate[2], rawDate[3])
+
+		data.WaterPOS.Row[i].Date = fmt.Sprintf("%s-%s-%s", year, month, day)
+	}
+
 	return data, err
 }
