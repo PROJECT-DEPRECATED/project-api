@@ -1,5 +1,8 @@
-project-api
-log.txt
+*.o
+.vscode/
 
-# MacOS Directory cache
+# Mac file cache
 .DS_Store
+
+# execute file
+project-api

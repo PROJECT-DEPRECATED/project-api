@@ -1,23 +1,19 @@
-TARGET=project-api
-SOURCES=src/*.go src/**/*.go
-MAIN=src/main.go
+CC=gcc
+CFLAG=-Wall -Wextra
+OBJS=src/main.o src/http.o
+OUTPUT=project-api
 
-TAG=default
+all: $(OUTPUT)
 
-$(TARGET): $(MAIN) $(SOURCES)
-	go build -o $(TARGET) $(MAIN)
+$(OUTPUT): $(OBJS)
+	gcc -o $@ $^
 
-debug:
-	go run main.go -debug
-
-docker:
-	docker-compose build --no-cache --build-arg	FILE_NAME="$(TARGET)"
-
-publish:
-	./scripts/publish.sh $(TAG)
+main.o: main.c http.h
+http.o: http.c http.h
 
 clean:
-	rm $(TARGET)
+	rm -f $(OBJS)
+	rm -f $(OUTPUT)
 
-rmlog:
-	rm log.txt
+.PHONY: all, clean
+
