@@ -4,6 +4,6 @@
 
 int main(int argc, char **argv)
 {
-    new_connection(3000);
+    open(3000);
     return 0;
 }
