@@ -4,6 +4,6 @@
 
 int main(int argc, char **argv)
 {
-    open(3000);
+    open_socket(3000);
     return 0;
 }

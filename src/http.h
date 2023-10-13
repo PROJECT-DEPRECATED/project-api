@@ -5,7 +5,10 @@
 
 #define BUF_SIZE 4096
 
-int client_sock(uint16_t port);
-void open();
+typedef struct {
+    int client_fd;
+} connection;
+
+void open_socket(uint16_t port);
 
 #endif
