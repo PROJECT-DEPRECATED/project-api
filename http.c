@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 
 #include "http.h"
-#include "router/route.h"
+#include "route.h"
 
 void on_accept(int server_fd)
 {
@@ -25,8 +25,12 @@ void on_accept(int server_fd)
 
     connection *conn = (connection *)malloc(sizeof(connection));
     conn->client_fd = client_fd;
+    conn->client_addr = client_addr;
 
-    router(conn, client_addr);
+    char req[BUF_SIZE];
+    recv(conn->client_fd, req, BUF_SIZE, 0);
+
+    router(conn, req);
 }
 
 void open_socket(uint16_t port)

@@ -1,6 +1,7 @@
 CC=gcc
 CFLAG=-Wall -Wextra
-OBJS=src/main.o src/http.o src/router/route.o src/router/index.o
+OBJS=main.o http.o route.o \
+	 index.o route_utils.o
 OUTPUT=project-api
 
 all: $(OUTPUT)
@@ -8,10 +9,11 @@ all: $(OUTPUT)
 $(OUTPUT): $(OBJS)
 	gcc -o $@ $^
 
-main.o:   main.c http.h
-http.o:   http.c http.h router/route.h
-route.o: router/route.c router/route.h http.h
-index.o: router/index.c router/index.h router/route.h http.h
+main.o:   	   main.c http.h
+http.o:   	   http.c http.h route.h
+route.o: 	   route.c route.h http.h
+index.o: 	   index.c index.h route.h http.h
+route_utils.o: route_utils.c route_utils.h route.h http.h
 
 clean:
 	rm -f $(OBJS)
