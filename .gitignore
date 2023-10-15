@@ -1,8 +1,7 @@
-*.o
+.idea/
 .vscode/
+.gradle/
+build/
 
 # Mac file cache
 .DS_Store
-
-# execute file
-project-api
