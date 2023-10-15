@@ -9,8 +9,8 @@
 int route_index(connection *conn, const char *req)
 {
     char resp[BUF_SIZE];
-    response *res = (response *)malloc(sizeof(response));
     content *data = (content *)malloc(sizeof(content));
+    response *res = (response *)malloc(sizeof(response));
 
     strcpy(data->type, "application/json");
     strcpy(data->length, "500");
@@ -21,7 +21,7 @@ int route_index(connection *conn, const char *req)
     strcpy(resp, build_resp(res));
 
     send(conn->client_fd, resp, strlen(resp), 0);
-
+    
     free(res);
     free(data);
     return 200;
