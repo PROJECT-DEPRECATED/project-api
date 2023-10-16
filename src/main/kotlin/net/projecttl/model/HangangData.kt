@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class HangangData(
     val status: Int,
     val area: String,
+    val area_code: Int,
     val data: HData,
     val res_time: String
 )

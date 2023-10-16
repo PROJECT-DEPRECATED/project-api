@@ -5,7 +5,6 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import net.projecttl.plugins.configureHTTP
-import net.projecttl.plugins.configureOpenAPI
 import net.projecttl.plugins.configureRouting
 
 lateinit var client: MongoClient
@@ -23,6 +22,5 @@ fun database() {
 
 fun Application.module() {
     configureHTTP()
-    configureOpenAPI()
     configureRouting()
 }
