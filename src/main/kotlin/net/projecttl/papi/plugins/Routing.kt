@@ -1,4 +1,4 @@
-package net.projecttl.plugins
+package net.projecttl.papi.plugins
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -6,12 +6,13 @@ import io.ktor.server.http.content.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import net.projecttl.api.Hangang
-import net.projecttl.api.MCProfile
-import net.projecttl.api.RoomTemp
-import net.projecttl.model.ErrorForm
+import net.projecttl.papi.api.Hangang
+import net.projecttl.papi.api.MCProfile
+import net.projecttl.papi.api.RoomTemp
+import net.projecttl.papi.model.ErrorForm
+import net.projecttl.papi.model.HealthCheck
 import java.lang.String.format
-import java.util.*
+import kotlin.random.Random
 
 fun Application.configureRouting() {
     install(ContentNegotiation) {
@@ -25,10 +26,13 @@ fun Application.configureRouting() {
             call.respondRedirect("https://github.com/devproje/project-api.git", true)
         }
         route("/v3") {
+            get {
+                call.respond(HealthCheck(200, "Hello, World!"))
+            }
             get("/hangang") {
                 val hangang = Hangang()
                 val resp = try {
-                    hangang.getData(2)
+                    hangang.getData(Random.nextInt(1, 6))
                 } catch (ex: Exception) {
                     ErrorForm(500, ex.message!!)
                 }

@@ -1,11 +1,10 @@
-package net.projecttl
+package net.projecttl.papi
 
-import com.example.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import net.projecttl.plugins.configureRouting
+import net.projecttl.papi.plugins.configureRouting
 import kotlin.test.*
 
 class ApplicationTest {
@@ -14,9 +13,8 @@ class ApplicationTest {
         application {
             configureRouting()
         }
-        client.get("/").apply {
+        client.get("/v3").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
         }
     }
 }

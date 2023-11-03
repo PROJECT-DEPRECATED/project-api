@@ -1,15 +1,17 @@
-package net.projecttl.api
+package net.projecttl.papi.api
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import net.projecttl.model.*
-import net.projecttl.utils.unwrapQuote
+import net.projecttl.papi.model.Cape
+import net.projecttl.papi.model.MojangAPI
+import net.projecttl.papi.model.Skin
+import net.projecttl.papi.model.Textures
+import net.projecttl.papi.utils.unwrapQuote
 import java.lang.String.format
 import java.net.URL
 import java.nio.charset.Charset
-import java.util.Base64
-import java.util.UUID
+import java.util.*
 
 class MCProfile(private val username: String) {
     private val uuid: UUID

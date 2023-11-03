@@ -1,4 +1,4 @@
-package net.projecttl.model
+package net.projecttl.papi.model
 
 import kotlinx.serialization.Serializable
 

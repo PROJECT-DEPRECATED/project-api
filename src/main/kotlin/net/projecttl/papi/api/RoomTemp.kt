@@ -1,10 +1,10 @@
-package net.projecttl.api
+package net.projecttl.papi.api
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
-import net.projecttl.model.TempData
-import net.projecttl.model.Temperature
-import net.projecttl.utils.unwrapQuote
+import net.projecttl.papi.model.TempData
+import net.projecttl.papi.model.Temperature
+import net.projecttl.papi.utils.unwrapQuote
 import java.net.URL
 import java.nio.charset.Charset
 

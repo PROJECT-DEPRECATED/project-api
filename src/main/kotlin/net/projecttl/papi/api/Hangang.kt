@@ -1,12 +1,11 @@
-package net.projecttl.api
+package net.projecttl.papi.api
 
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import net.projecttl.model.HData
-import net.projecttl.model.HangangData
-import net.projecttl.utils.unwrapQuote
+import net.projecttl.papi.model.HData
+import net.projecttl.papi.model.HangangData
+import net.projecttl.papi.utils.unwrapQuote
 import java.lang.String.format
 import java.net.URL
 import java.nio.charset.Charset

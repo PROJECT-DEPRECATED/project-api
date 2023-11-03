@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+.gradle/
+build/
+
+# Mac file cache
+.DS_Store

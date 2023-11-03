@@ -1,4 +1,4 @@
-package net.projecttl.plugins
+package net.projecttl.papi.plugins
 
 import io.ktor.http.*
 import io.ktor.server.application.*
