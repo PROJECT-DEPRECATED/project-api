@@ -1,2 +1,2 @@
-# go-app-template
-Golang cli application template
+# Project API
+Project_IO's Personal API Service

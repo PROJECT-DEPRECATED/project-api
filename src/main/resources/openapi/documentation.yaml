@@ -1,0 +1,83 @@
+openapi: "3.0.3"
+info:
+  title: "Project API"
+  description: "Project_IO's Personal API Service"
+  version: "3.0.0"
+servers:
+  - url: "http://0.0.0.0:3000"
+paths:
+  /v3/hangang:
+    get:
+      tags:
+        - Hangang
+      summary: "Seoul Han River's info"
+      description: "Seoul Han River's info"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example:
+                  value: {"status":200,"area":"중랑천","data":{"ph":"테스트","temp":"테스트","date":"20231016","time":"09:00"},"res_time":"800ms"}
+  /v3/hangang/{area}:
+    get:
+      tags:
+        - Hangang
+      summary: "Seoul Han River's info"
+      description: "Seoul Han River's info"
+      parameters:
+        - name: area
+          in: path
+          description: Can get Han River's another info (1 ~ 5)
+          required: true
+          schema:
+            type: integer
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                탄천:
+                  value: { "status": 200,"area": "탄천","area_code": 1,"data": { "ph": "테스트","temp": "테스트","date": "20231016","time": "09:00" },"res_time": "800ms" }
+                중랑천:
+                  value: { "status": 200,"area": "중랑천","area_code": 2,"data": { "ph": "테스트","temp": "테스트","date": "20231016","time": "09:00" },"res_time": "800ms" }
+                안양천:
+                  value: { "status": 200,"area": "안양천","area_code": 3,"data": { "ph": "테스트","temp": "테스트","date": "20231016","time": "09:00" },"res_time": "800ms" }
+                선유:
+                  value: { "status": 200,"area": "선유","area_code": 4,"data": { "ph": "테스트","temp": "테스트","date": "20231016","time": "09:00" },"res_time": "800ms" }
+                노량진:
+                  value: { "status": 200,"area": "노량진","area_code": 5,"data": { "ph": "테스트","temp": "테스트","date": "20231016","time": "09:00" },"res_time": "800ms" }
+
+  /v3/mcprofile/{username}:
+    get:
+      tags:
+        - MCProfile
+      summary: "Minecraft Player info"
+      description: "Minecraft Player info"
+      parameters:
+        - name: username
+          in: path
+          description: Minecraft User name
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                Example:
+                  value: {"status":200,"unique_id":"fc12673f50064d9495dd0179ff2a620b","username":"Project_IO","textures":{"skin":{"url":"http://textures.minecraft.net/texture/bae0500d41648b657d268234e6730b5c7e940973e8495e449cb506c8e2fbcbb3"},"cape":{"url":"http://textures.minecraft.net/texture/2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933"}},"res_time":"784ms"}
+components:
+  schemas:

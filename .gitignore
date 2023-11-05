@@ -1,5 +1,7 @@
-project-api
-log.txt
+.idea/
+.vscode/
+.gradle/
+build/
 
-# MacOS Directory cache
+# Mac file cache
 .DS_Store

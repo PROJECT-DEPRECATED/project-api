@@ -1,20 +1,8 @@
-FROM golang:1.21.0-alpine3.17
+FROM amazoncorretto:17-alpine3.18
 
-# Ready to build
-RUN apk add make
-WORKDIR /opt/app/src
+WORKDIR /opt/api
 COPY . .
 
-# Build
-RUN ./configure
-RUN make
-RUN mv ./project-api /opt/app
+RUN ./gradlew build
 
-# Grab static data
-WORKDIR /opt/app
-RUN cp -r ./src/static /opt/app
-
-# Remove build source
-RUN rm -rf ./src
-
-ENTRYPOINT [ "/opt/app/project-api", "-mode=release" ]
+ENTRYPOINT ["java", "-Xms512M", "-Xmx2048", "-jar", "/opt/api/build/libs/project-api-all.jar"]
