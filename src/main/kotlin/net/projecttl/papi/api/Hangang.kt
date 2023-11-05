@@ -20,6 +20,7 @@ class Hangang {
         val data = obj.jsonObject["WPOSInformationTime"]!!.jsonObject["row"]!!.jsonArray[0]
 
         val resTime = System.currentTimeMillis() - start
+
         return HangangData(
             status = 200,
             area = unwrapQuote(data.jsonObject["SITE_ID"]),
@@ -27,7 +28,24 @@ class Hangang {
             data = HData(
                 ph = unwrapQuote(data.jsonObject["W_PH"]),
                 temp = unwrapQuote(data.jsonObject["W_TEMP"]),
-                date = unwrapQuote(data.jsonObject["MSR_DATE"]),
+                date = unwrapQuote(data.jsonObject["MSR_DATE"]).let {
+                    var str = ""
+                    for (i in 0 until 4) {
+                        str += it[i]
+                    }
+                    str += "-"
+
+                    for (i in 4 until 6) {
+                        str += it[i]
+                    }
+                    str += "-"
+
+                    for (i in 6 until 8) {
+                        str += it[i]
+                    }
+
+                    str
+                },
                 time = unwrapQuote(data.jsonObject["MSR_TIME"])
             ),
             res_time = "${resTime}ms"
