@@ -5,4 +5,4 @@ COPY . .
 
 RUN ./gradlew build
 
-ENTRYPOINT ["java", "-Xms512M", "-Xmx2048", "-jar", "/opt/api/build/libs/project-api-all.jar"]
+ENTRYPOINT ["java", "-Xms512M", "-Xmx2048M", "-jar", "/opt/api/build/libs/project-api-all.jar"]
