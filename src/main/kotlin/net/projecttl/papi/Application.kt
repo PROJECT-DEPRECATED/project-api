@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
     debug = args.contains("--debug") || args.contains("-d")
     runBlocking { database() }
 
-    embeddedServer(Netty, port = 3001, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = 3000, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 
