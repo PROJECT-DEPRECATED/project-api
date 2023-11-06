@@ -10,7 +10,7 @@ fun unwrapQuote(e: JsonElement?): String {
 }
 
 suspend fun database(run: suspend MongoDatabase.() -> Unit = {}) {
-    val uri = if (debug) "mongodb://localhost:27017" else "mongo://project-api-db:27017"
+    val uri = if (debug) "mongodb://localhost:27017" else "mongodb://project-api-db:27017"
     val client = MongoClient.create(uri)
 
     try {
