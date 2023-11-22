@@ -65,7 +65,7 @@ class MCProfile(private val username: String) {
         val resTime = System.currentTimeMillis() - start
         return MojangAPI(
             status = 200,
-            unique_id = unwrapQuote(decoded.jsonObject["profileId"]!!),
+            unique_id = refactorUUID(unwrapQuote(decoded.jsonObject["profileId"]!!)),
             username = unwrapQuote(decoded.jsonObject["profileName"]!!),
             textures = Textures(
                 skin = Skin(
