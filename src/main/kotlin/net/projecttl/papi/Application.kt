@@ -6,6 +6,7 @@ import io.ktor.server.netty.*
 import kotlinx.coroutines.runBlocking
 import net.projecttl.papi.plugins.configureHTTP
 import net.projecttl.papi.plugins.configureRouting
+import net.projecttl.papi.plugins.configureSecurity
 import net.projecttl.papi.utils.database
 import kotlin.properties.Delegates
 
@@ -22,4 +23,5 @@ fun main(args: Array<String>) {
 fun Application.module() {
     configureHTTP()
     configureRouting()
+    configureSecurity()
 }
