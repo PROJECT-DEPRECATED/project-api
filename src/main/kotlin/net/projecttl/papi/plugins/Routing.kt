@@ -8,7 +8,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.projecttl.papi.api.Hangang
 import net.projecttl.papi.api.MCProfile
-import net.projecttl.papi.api.RoomTemp
 import net.projecttl.papi.model.ErrorForm
 import net.projecttl.papi.model.HealthCheck
 import java.lang.String.format
@@ -63,18 +62,6 @@ fun Application.configureRouting() {
                     }
 
                     call.respond(profile)
-                }
-            }
-            route("/room") {
-                get("/temp") {
-                    val temp = try {
-                        RoomTemp().get()
-                    } catch (ex: Exception) {
-                        // ErrorForm(500, ex.message!!)
-                        ErrorForm(404, "Not Found(not created api)")
-                    }
-
-                    call.respond(temp)
                 }
             }
         }

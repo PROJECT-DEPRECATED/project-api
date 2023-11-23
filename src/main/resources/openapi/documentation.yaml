@@ -78,6 +78,20 @@ paths:
                 type: "string"
               examples:
                 Example:
-                  value: {"status":200,"unique_id":"fc12673f50064d9495dd0179ff2a620b","username":"Project_IO","textures":{"skin":{"url":"http://textures.minecraft.net/texture/bae0500d41648b657d268234e6730b5c7e940973e8495e449cb506c8e2fbcbb3"},"cape":{"url":"http://textures.minecraft.net/texture/2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933"}},"res_time":"784ms"}
+                  value: {
+                    "status":200,
+                    "unique_id": "fc12673f-5006-4d94-95dd-0179ff2a620b",
+                    "username": "Project_IO",
+                    "textures": {
+                      "skin": {
+                        "url":
+                          "http://textures.minecraft.net/texture/bae0500d41648b657d268234e6730b5c7e940973e8495e449cb506c8e2fbcbb3"
+                      },
+                      "cape": {
+                        "url": "http://textures.minecraft.net/texture/2340c0e03dd24a11b15a8b33c2a7e9e32abb2051b2481d0ba7defd635ca7a933"
+                      }
+                    },
+                    "res_time":"784ms"
+                  }
 components:
   schemas:
