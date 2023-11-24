@@ -3,6 +3,20 @@ val kotlin_version: String by project
 val logback_version: String by project
 val mongo_driver_version: String by project
 
+data class Deps(val name: String, val jvm: Boolean = true, val testImpl: Boolean = false)
+
+val deps = listOf(
+    Deps("server-auth"),
+    Deps("server-cors"),
+    Deps("server-core"),
+    Deps("server-netty"),
+    Deps("server-swagger"),
+    Deps("server-content-negotiation"),
+    Deps("serialization-kotlinx-json"),
+    Deps("server-sessions", jvm = false),
+    Deps("server-tests", testImpl = true)
+)
+
 plugins {
     kotlin("jvm") version "1.9.10"
     id("io.ktor.plugin") version "2.3.5"
@@ -30,17 +44,22 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("io.ktor:ktor-server-cors-jvm")
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-sessions")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("io.ktor:ktor-server-swagger-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
+    for (dep in deps) {
+        var str = "io.ktor:ktor-${dep.name}"
+        if (dep.jvm) {
+            str += "-jvm"
+        }
+
+        if (dep.testImpl) {
+            testImplementation(str)
+            continue
+        }
+
+        implementation(str)
+    }
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:$mongo_driver_version")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
