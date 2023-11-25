@@ -1,4 +1,4 @@
-package net.projecttl.papi.model
+package net.projecttl.papi.model.error
 
 import kotlinx.serialization.Serializable
 

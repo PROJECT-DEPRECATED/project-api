@@ -1,22 +1,17 @@
 package net.projecttl.papi.plugins
 
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import net.projecttl.papi.api.Hangang
 import net.projecttl.papi.api.MCProfile
-import net.projecttl.papi.model.ErrorForm
+import net.projecttl.papi.model.error.ErrorForm
 import net.projecttl.papi.model.HealthCheck
 import java.lang.String.format
 import kotlin.random.Random
 
 fun Application.configureRouting() {
-    install(ContentNegotiation) {
-        json()
-    }
     routing {
         staticResources("/static", "public") {
             enableAutoHeadResponse()
@@ -58,7 +53,7 @@ fun Application.configureRouting() {
                     val profile = try {
                         MCProfile(username).getProfile()
                     } catch (ex: Exception) {
-                        ErrorForm(404, format("player `%s` is not found", username))
+                        ErrorForm(404, format("player '%s' is not found", username))
                     }
 
                     call.respond(profile)

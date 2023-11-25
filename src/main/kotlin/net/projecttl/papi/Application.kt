@@ -20,6 +20,6 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    configureHTTP()
     configureRouting()
+    configureHTTP()
 }
