@@ -14,12 +14,13 @@ val deps = listOf(
     Deps("server-content-negotiation"),
     Deps("serialization-kotlinx-json"),
     Deps("server-sessions", jvm = false),
+    Deps("server-auth-jwt", jvm = false),
     Deps("server-tests", testImpl = true)
 )
 
 plugins {
-    kotlin("jvm") version "1.9.10"
-    id("io.ktor.plugin") version "2.3.5"
+    kotlin("jvm") version "1.9.21"
+    id("io.ktor.plugin") version "2.3.6"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
 }
 
@@ -58,8 +59,12 @@ dependencies {
         implementation(str)
     }
 
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:$mongo_driver_version")
+    implementation("io.ktor:ktor-server-auth-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-core-jvm:2.3.6")
+    implementation("io.ktor:ktor-server-auth-jwt-jvm:2.3.6")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

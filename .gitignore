@@ -3,5 +3,8 @@
 .gradle/
 build/
 
+.env
+!.env.example
+
 # Mac file cache
 .DS_Store
