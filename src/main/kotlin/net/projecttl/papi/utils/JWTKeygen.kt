@@ -5,35 +5,34 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import net.projecttl.papi.env
 import net.projecttl.papi.model.User
-import java.util.Date
+import java.util.*
 
-class JWTKeygen {
-    private val validity = 720000 * 10
+object JWTKeygen {
+    private val secret = env["JWT_PRIVATE_KEY"]
+    private val issuer = env["JWT_ISSUER"]
+    private val audience = env["JWT_AUDIENCE"]
+    private val algorithm = Algorithm.HMAC256(secret)
+
+    private const val VALIDITY = 7200000
 
     private fun getExpired(): Date {
-        return Date(System.currentTimeMillis() + validity)
+        return Date(System.currentTimeMillis() + VALIDITY)
+    }
+
+    fun verifier(): JWTVerifier {
+        return JWT.require(algorithm)
+            .withIssuer(issuer)
+            .build()
     }
 
     fun genToken(user: User): String {
         return JWT.create()
-            .withSubject("Authentication")
+            .withSubject("Project API Authentication")
             .withIssuer(issuer)
-            .withAudience("papi-user")
+            .withAudience(audience)
             .withClaim("user_id", user.uniqueId)
             .withClaim("username", user.name)
             .withExpiresAt(getExpired())
             .sign(algorithm)
-    }
-
-    companion object {
-        private val secret = env["JWT_PRIVATE_KEY"]
-        private val issuer = env["JWT_ISSUER"]
-        private val algorithm = Algorithm.HMAC256(secret)
-
-        fun verifier(): JWTVerifier {
-            return JWT.require(algorithm)
-                .withIssuer(issuer)
-                .build()
-        }
     }
 }

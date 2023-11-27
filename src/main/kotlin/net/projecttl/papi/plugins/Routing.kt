@@ -1,7 +1,9 @@
 package net.projecttl.papi.plugins
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -9,13 +11,11 @@ import io.ktor.server.routing.*
 import net.projecttl.papi.api.AccountController
 import net.projecttl.papi.api.Hangang
 import net.projecttl.papi.api.MCProfile
-import net.projecttl.papi.model.AccountInfo
-import net.projecttl.papi.model.AuthData
+import net.projecttl.papi.model.*
 import net.projecttl.papi.model.error.ErrorForm
-import net.projecttl.papi.model.HealthCheck
-import net.projecttl.papi.model.User
 import net.projecttl.papi.utils.JWTKeygen
 import java.lang.String.format
+import java.util.Base64
 import kotlin.random.Random
 
 fun Application.configureRouting() {
@@ -28,7 +28,7 @@ fun Application.configureRouting() {
         }
         route("/v3") {
             get {
-                call.respond(HealthCheck(200, "Hello, World!"))
+                call.respond(HealthCheck(200, "v3 router is work"))
             }
             get("/hangang") {
                 val hangang = Hangang()
@@ -68,29 +68,47 @@ fun Application.configureRouting() {
             }
         }
         route("/auth") {
+            get {
+                call.respond(HealthCheck(200, "auth router is work"))
+            }
             post("login") {
                 val auth = call.receive<AuthData>()
                 val authFail = ErrorForm(401, "username or password not match!")
-                val login = AccountController.login(auth)
+                val login = AccountController(auth).login()
                 if (login == null) {
-                    call.respond(authFail)
+                    call.respond(HttpStatusCode.Unauthorized, authFail)
                     return@post
                 }
 
-                val token = JWTKeygen().genToken(login)
+                val token = JWTKeygen.genToken(login)
 
                 call.respond(hashMapOf("token" to token))
             }
             put("register") {
                 val auth = call.receive<AccountInfo>()
-                AccountController(auth).create()
+                if (AccountController(AuthData(auth.username, "")).find() != null) {
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        ErrorForm(400, "current username is already exist")
+                    )
+                    return@put
+                }
+
+                AccountController.create(auth)
+
+                call.respond(hashMapOf("status" to 200, "ok" to 1))
             }
             authenticate("auth") {
-                get("refresh") {
-                    val old = call.response.headers["token"]
-                    println(old)
+                get("/refresh") {
+                    val principal = call.principal<JWTPrincipal>()!!
+                    val payload = principal.payload
+                    val user = User(
+                        payload.getClaim("user_id").asString(),
+                        payload.getClaim("username").asString()
+                    )
+                    val token = JWTKeygen.genToken(user)
 
-//                    val token = JWTKeygen().genToken()
+                    call.respond(hashMapOf("token" to token))
                 }
             }
         }

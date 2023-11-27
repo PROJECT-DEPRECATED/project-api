@@ -36,6 +36,7 @@ class MCProfile(private val username: String) {
 
             return ps
         }
+
         var parsed = ""
         parsed += str.parse(0..7)
         parsed += str.parse(8..11)

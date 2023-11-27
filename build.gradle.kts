@@ -62,9 +62,6 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:$mongo_driver_version")
-    implementation("io.ktor:ktor-server-auth-jvm:2.3.6")
-    implementation("io.ktor:ktor-server-core-jvm:2.3.6")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm:2.3.6")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

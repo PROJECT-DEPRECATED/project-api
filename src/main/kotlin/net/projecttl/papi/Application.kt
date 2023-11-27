@@ -13,8 +13,8 @@ import net.projecttl.papi.utils.database
 val debug = System.getProperty("io.ktor.development").toBoolean()
 val env = dotenv()
 
-fun main() {
-    runBlocking { database() }
+suspend fun main() {
+    database()
     embeddedServer(Netty, port = 3000, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
