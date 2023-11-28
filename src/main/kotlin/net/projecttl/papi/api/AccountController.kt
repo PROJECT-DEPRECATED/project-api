@@ -3,7 +3,7 @@ package net.projecttl.papi.api
 import com.mongodb.client.model.Filters.eq
 import kotlinx.coroutines.flow.singleOrNull
 import net.projecttl.papi.model.Account
-import net.projecttl.papi.model.AccountInfo
+import net.projecttl.papi.model.AccountData
 import net.projecttl.papi.model.AuthData
 import net.projecttl.papi.model.User
 import net.projecttl.papi.utils.database
@@ -11,12 +11,14 @@ import java.security.MessageDigest
 import java.util.*
 
 class AccountController(private val auth: AuthData) {
-
     suspend fun find(): Account? {
-        var data: Account? = null
-        database {
-            val coll = getCollection<Account>("accounts")
-            data = coll.find(eq("info.username", auth.username)).singleOrNull()
+        val data = try {
+            database<Account>(COLL_NAME) {
+                it.find(eq("info.username", auth.username)).singleOrNull()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return null
         }
 
         return data
@@ -24,7 +26,6 @@ class AccountController(private val auth: AuthData) {
 
     suspend fun login(): User? {
         val data = find() ?: return null
-
         if (hash(auth.password, hash(data.unique_id)) != data.info.password) {
             return null
         }
@@ -33,6 +34,8 @@ class AccountController(private val auth: AuthData) {
     }
 
     companion object {
+        private const val COLL_NAME = "accounts"
+
         private fun hash(str: String): String {
             val md = MessageDigest.getInstance("SHA-256")
             return Base64.getEncoder()
@@ -43,21 +46,38 @@ class AccountController(private val auth: AuthData) {
             return hash("$str:$salt")
         }
 
-        suspend fun create(info: AccountInfo) {
+        suspend fun exist(id: String): Boolean {
+            val res = try {
+                database<Account>(COLL_NAME) {
+                    it.find(eq(Account::unique_id.name, id)).singleOrNull()
+                }
+            } catch (ex: Exception) {
+                return false
+            }
+
+            return res != null
+        }
+
+        suspend fun create(info: AccountData) {
             val id = UUID.randomUUID().toString()
             val hashedPassword = hash(info.password, hash(id))
 
-            val newInfo = AccountInfo(
+            val newInfo = AccountData(
                 info.name,
                 info.email,
                 info.username,
                 hashedPassword
             )
 
-            val acc = Account(id, newInfo)
-            database {
-                val coll = getCollection<Account>("accounts")
-                coll.insertOne(acc)
+            try {
+                val acc = Account(id, newInfo)
+                val insertedId = database(COLL_NAME) {
+                    it.insertOne(acc)
+                }
+
+                println("Inserted document for id: ${insertedId.toString()}")
+            } catch (ex: Exception) {
+                ex.printStackTrace()
             }
         }
     }

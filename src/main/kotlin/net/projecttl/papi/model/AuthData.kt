@@ -9,16 +9,25 @@ data class User(val uniqueId: String, val name: String) : Principal
 @Serializable
 data class AuthData(val username: String, val password: String)
 
-@Serializable
 data class Account(
     @BsonId val unique_id: String,
-    val info: AccountInfo
+    val info: AccountData,
+    val wheel: Boolean = false
 )
 
 @Serializable
-data class AccountInfo(
+data class AccountData(
     val name: String,
     val email: String,
     val username: String,
     val password: String
+)
+
+@Serializable
+data class AccountInfo(
+    val unique_id: String,
+    val name: String,
+    val email: String,
+    val username: String,
+    val wheel: Boolean
 )

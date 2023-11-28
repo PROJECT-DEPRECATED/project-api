@@ -15,7 +15,6 @@ import net.projecttl.papi.model.*
 import net.projecttl.papi.model.error.ErrorForm
 import net.projecttl.papi.utils.JWTKeygen
 import java.lang.String.format
-import java.util.Base64
 import kotlin.random.Random
 
 fun Application.configureRouting() {
@@ -85,7 +84,7 @@ fun Application.configureRouting() {
                 call.respond(hashMapOf("token" to token))
             }
             put("register") {
-                val auth = call.receive<AccountInfo>()
+                val auth = call.receive<AccountData>()
                 if (AccountController(AuthData(auth.username, "")).find() != null) {
                     call.respond(
                         HttpStatusCode.BadRequest,
