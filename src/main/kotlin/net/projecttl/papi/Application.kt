@@ -12,7 +12,7 @@ import net.projecttl.papi.utils.exec
 val debug = System.getProperty("io.ktor.development").toBoolean()
 val env = dotenv()
 
-fun main() {
+suspend fun main() {
     try {
         exec()
     } catch (ex: Exception) {

@@ -6,14 +6,15 @@ import net.projecttl.papi.model.Account
 import net.projecttl.papi.model.AccountData
 import net.projecttl.papi.model.AuthData
 import net.projecttl.papi.model.User
-import net.projecttl.papi.utils.database
+import net.projecttl.papi.utils.query
+import net.projecttl.papi.utils.exec
 import java.security.MessageDigest
 import java.util.*
 
 class AccountController(private val auth: AuthData) {
     suspend fun find(): Account? {
         val data = try {
-            database<Account>(COLL_NAME) {
+            query<Account>(COLL_NAME) {
                 it.find(eq("info.username", auth.username)).singleOrNull()
             }
         } catch (ex: Exception) {
@@ -48,7 +49,7 @@ class AccountController(private val auth: AuthData) {
 
         suspend fun find(id: String): Account? {
             val res = try {
-                database<Account>(COLL_NAME) {
+                query<Account>(COLL_NAME) {
                     it.find(eq("_id", id)).singleOrNull()
                 }
             } catch (ex: Exception) {
@@ -72,11 +73,10 @@ class AccountController(private val auth: AuthData) {
 
             try {
                 val acc = Account(id, newInfo)
-                val insertedId = database(COLL_NAME) {
-                    it.insertOne(acc)
+                exec {
+                    val coll = getCollection<Account>(COLL_NAME)
+                    coll.insertOne(acc)
                 }
-
-                println("Inserted document for id: ${insertedId.toString()}")
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

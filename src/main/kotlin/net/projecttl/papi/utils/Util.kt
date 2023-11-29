@@ -18,7 +18,7 @@ fun unwrapQuote(e: JsonElement?): String {
     return e.toString().unwrapQuote()
 }
 
-fun exec(run: MongoDatabase.() -> Unit = {}) {
+suspend fun exec(run: suspend MongoDatabase.() -> Unit = {}) {
     val client = MongoClient.create(dbURI)
 
     try {
@@ -30,7 +30,7 @@ fun exec(run: MongoDatabase.() -> Unit = {}) {
     }
 }
 
-inline fun <reified T : Any> database(
+inline fun <reified T : Any> query(
     collName: String,
     run: MongoDatabase.(coll: MongoCollection<T>) -> T?
 ): T? {
