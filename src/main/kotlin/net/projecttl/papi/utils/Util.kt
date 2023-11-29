@@ -36,13 +36,28 @@ inline fun <reified T : Any> query(
 ): T? {
     val client = MongoClient.create(dbURI)
     val database = client.getDatabase("project-api")
-    val data: T? = try {
+
+    return try {
         database.run(database.getCollection<T>(collName))
     } catch (ex: Exception) {
         throw ex
     } finally {
         client.close()
     }
+}
 
-    return data
+inline fun <reified T : Any> modify(
+    collName: String,
+    run: MongoDatabase.(coll: MongoCollection<T>) -> Unit
+) {
+    val client: MongoClient = MongoClient.create(dbURI)
+    val database: MongoDatabase = client.getDatabase("project-api")
+
+    return try {
+        database.run(database.getCollection<T>(collName))
+    } catch (ex: Exception) {
+        throw ex
+    } finally {
+        client.close()
+    }
 }

@@ -7,7 +7,7 @@ import net.projecttl.papi.model.AccountData
 import net.projecttl.papi.model.AuthData
 import net.projecttl.papi.model.User
 import net.projecttl.papi.utils.query
-import net.projecttl.papi.utils.exec
+import net.projecttl.papi.utils.modify
 import java.security.MessageDigest
 import java.util.*
 
@@ -73,9 +73,8 @@ class AccountController(private val auth: AuthData) {
 
             try {
                 val acc = Account(id, newInfo)
-                exec {
-                    val coll = getCollection<Account>(COLL_NAME)
-                    coll.insertOne(acc)
+                modify<Account>(COLL_NAME) {
+                    it.insertOne(acc)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
