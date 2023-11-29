@@ -10,6 +10,7 @@ import net.projecttl.papi.env
 import net.projecttl.papi.model.AuthData
 import net.projecttl.papi.model.error.ErrorForm
 import net.projecttl.papi.utils.JWTKeygen
+import net.projecttl.papi.utils.unwrapQuote
 
 fun Application.configureSecurity() {
     val jwtRealm = env["JWT_REALM"]
@@ -20,13 +21,12 @@ fun Application.configureSecurity() {
             realm = jwtRealm
             verifier(JWTKeygen.verifier())
             validate { credential ->
-                println(credential.payload.getClaim("username"))
-                if (credential.payload.audience.contains(audience)
-                    && AccountController.exist(credential.payload.getClaim("user_id").asString())) {
-                    JWTPrincipal(credential.payload)
-                } else {
-                    null
-                }
+                val contain = credential.payload.audience.contains(audience)
+                val exist = AccountController.find(
+                    credential.payload.getClaim("user_id").asString().unwrapQuote()
+                ) != null
+
+                if (contain && exist) JWTPrincipal(credential.payload) else null
             }
             challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, ErrorForm(

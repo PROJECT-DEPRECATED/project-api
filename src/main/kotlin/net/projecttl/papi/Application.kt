@@ -7,14 +7,14 @@ import io.ktor.server.netty.*
 import net.projecttl.papi.plugins.configureHTTP
 import net.projecttl.papi.plugins.configureRouting
 import net.projecttl.papi.plugins.configureSecurity
-import net.projecttl.papi.utils.database
+import net.projecttl.papi.utils.exec
 
 val debug = System.getProperty("io.ktor.development").toBoolean()
 val env = dotenv()
 
-suspend fun main() {
+fun main() {
     try {
-        database()
+        exec()
     } catch (ex: Exception) {
         ex.printStackTrace()
         return

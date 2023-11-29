@@ -46,16 +46,17 @@ class AccountController(private val auth: AuthData) {
             return hash("$str:$salt")
         }
 
-        suspend fun exist(id: String): Boolean {
+        suspend fun find(id: String): Account? {
             val res = try {
                 database<Account>(COLL_NAME) {
-                    it.find(eq(Account::unique_id.name, id)).singleOrNull()
+                    it.find(eq("_id", id)).singleOrNull()
                 }
             } catch (ex: Exception) {
-                return false
+                ex.printStackTrace()
+                return null
             }
 
-            return res != null
+            return res
         }
 
         suspend fun create(info: AccountData) {

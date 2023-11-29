@@ -31,3 +31,9 @@ data class AccountInfo(
     val username: String,
     val wheel: Boolean
 )
+
+@Serializable
+data class TokenResult(
+    val status: Int,
+    val token: String
+)

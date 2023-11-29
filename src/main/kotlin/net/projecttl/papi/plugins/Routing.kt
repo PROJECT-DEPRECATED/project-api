@@ -14,6 +14,7 @@ import net.projecttl.papi.api.MCProfile
 import net.projecttl.papi.model.*
 import net.projecttl.papi.model.error.ErrorForm
 import net.projecttl.papi.utils.JWTKeygen
+import net.projecttl.papi.utils.unwrapQuote
 import java.lang.String.format
 import kotlin.random.Random
 
@@ -81,7 +82,7 @@ fun Application.configureRouting() {
 
                 val token = JWTKeygen.genToken(login)
 
-                call.respond(hashMapOf("token" to token))
+                call.respond(TokenResult(200, token))
             }
             put("register") {
                 val auth = call.receive<AccountData>()
@@ -107,7 +108,21 @@ fun Application.configureRouting() {
                     )
                     val token = JWTKeygen.genToken(user)
 
-                    call.respond(hashMapOf("token" to token))
+                    call.respond(TokenResult(200, token))
+                }
+                get("/info") {
+                    val principal = call.principal<JWTPrincipal>()!!
+                    val payload = principal.payload
+                    val acc = AccountController.find(payload.getClaim("user_id").asString())!!
+                    val info = AccountInfo(
+                        acc.unique_id,
+                        acc.info.name,
+                        acc.info.email,
+                        acc.info.username,
+                        acc.wheel
+                    )
+
+                    call.respond(info)
                 }
             }
         }
