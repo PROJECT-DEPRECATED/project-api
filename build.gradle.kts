@@ -65,3 +65,11 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
+
+tasks {
+    processResources {
+        filesMatching("version.txt") {
+            expand(project.properties)
+        }
+    }
+}

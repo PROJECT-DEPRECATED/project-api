@@ -13,6 +13,7 @@ import net.projecttl.papi.model.*
 import net.projecttl.papi.model.error.ErrorForm
 import net.projecttl.papi.utils.JWTKeygen
 import net.projecttl.papi.utils.unwrapQuote
+import java.util.*
 
 fun Application.configureSecurity() {
     val jwtRealm = env["JWT_REALM"]
@@ -24,9 +25,8 @@ fun Application.configureSecurity() {
             verifier(JWTKeygen.verifier())
             validate { credential ->
                 val contain = credential.payload.audience.contains(audience)
-                val exist = AccountController.find(
-                    credential.payload.getClaim("user_id").asString().unwrapQuote()
-                ) != null
+                val id = UUID.fromString(credential.payload.getClaim("user_id").asString().unwrapQuote())
+                val exist = AccountController(id).find() != null
 
                 if (contain && exist) JWTPrincipal(credential.payload) else null
             }
@@ -86,7 +86,9 @@ fun Application.configureSecurity() {
                 get("/info") {
                     val principal = call.principal<JWTPrincipal>()!!
                     val payload = principal.payload
-                    val acc = AccountController.find(payload.getClaim("user_id").asString())!!
+
+                    val id = UUID.fromString(payload.getClaim("user_id").asString())
+                    val acc = AccountController(id).find()!!
                     val info = AccountInfo(
                         acc.unique_id,
                         acc.info.name,

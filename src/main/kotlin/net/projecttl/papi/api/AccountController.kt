@@ -2,6 +2,7 @@ package net.projecttl.papi.api
 
 import com.mongodb.client.model.Filters.eq
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.runBlocking
 import net.projecttl.papi.model.Account
 import net.projecttl.papi.model.AccountData
 import net.projecttl.papi.model.AuthData
@@ -10,12 +11,36 @@ import net.projecttl.papi.utils.query
 import net.projecttl.papi.utils.modify
 import java.security.MessageDigest
 import java.util.*
+import kotlin.NullPointerException
 
-class AccountController(private val auth: AuthData) {
+enum class AccountDataType {
+    NAME,
+    EMAIL,
+    PASSWORD
+}
+
+class AccountController {
+    private val auth: AuthData
+    private val id: UUID
+
+    constructor(auth: AuthData) {
+        val data = runBlocking { find() ?: throw NullPointerException() }
+
+        this.auth = auth
+        this.id = UUID.fromString(data.unique_id)
+    }
+
+    constructor(id: UUID) {
+        val data = runBlocking { find() ?: throw NullPointerException() }
+
+        this.id = id
+        this.auth = AuthData(data.info.username, data.info.password)
+    }
+
     suspend fun find(): Account? {
         val data = try {
             query<Account>(COLL_NAME) {
-                it.find(eq("info.username", auth.username)).singleOrNull()
+                it.find(eq("_id", id.toString())).singleOrNull()
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -34,6 +59,18 @@ class AccountController(private val auth: AuthData) {
         return User(data.unique_id, data.info.username)
     }
 
+    suspend fun edit(type: AccountDataType, value: String) {
+        val item = when (type) {
+            AccountDataType.NAME -> "info.name"
+            AccountDataType.EMAIL -> "info.email"
+            AccountDataType.PASSWORD -> "info.password"
+        }
+
+        modify<Account>(COLL_NAME) {
+            it.updateOne(eq("_id", id.toString()), eq("\$set", eq(item, value)))
+        }
+    }
+
     companion object {
         private const val COLL_NAME = "accounts"
 
@@ -45,19 +82,6 @@ class AccountController(private val auth: AuthData) {
 
         private fun hash(str: String, salt: String): String {
             return hash("$str:$salt")
-        }
-
-        suspend fun find(id: String): Account? {
-            val res = try {
-                query<Account>(COLL_NAME) {
-                    it.find(eq("_id", id)).singleOrNull()
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                return null
-            }
-
-            return res
         }
 
         suspend fun create(info: AccountData) {

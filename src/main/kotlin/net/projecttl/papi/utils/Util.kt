@@ -5,6 +5,7 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.serialization.json.JsonElement
 import net.projecttl.papi.debug
+import java.io.File
 
 val dbURI = if (debug) {
     "mongodb://localhost:27017"
